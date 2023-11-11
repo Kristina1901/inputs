@@ -1,0 +1,94 @@
+.App {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.box {
+  margin-bottom: 20px;
+  align-items: center;
+}
+.card {
+  width: 50%;
+  margin-bottom: 20px;
+}
+.card:last-child {
+  margin-bottom: 0;
+}
+.card-head {
+  background: rgba(0, 17, 51, 0.1);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.delete {
+  background: skyblue;
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+.box {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
+.add {
+  background: skyblue;
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+.opencard {
+  background: skyblue;
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+
+.card-text {
+  width: 95%;
+  height: 25px;
+}
+.wrapper-card-text {
+  padding: 10px;
+  background: rgb(237, 240, 242);
+}
+.box-name {
+  margin-right: 4px;
+}
