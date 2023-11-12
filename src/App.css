@@ -82,13 +82,23 @@
 }
 
 .card-text {
-  width: 95%;
+  width: 70%;
   height: 25px;
 }
 .wrapper-card-text {
   padding: 10px;
+  min-height: 66px;
   background: rgb(237, 240, 242);
 }
 .box-name {
   margin-right: 4px;
+}
+.category-list {
+  list-style-type: none;
+  width: 100px;
+  padding: 0;
+  background: white;
+}
+textarea {
+  resize: none;
 }

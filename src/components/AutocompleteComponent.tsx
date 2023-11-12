@@ -1,16 +1,18 @@
-// AutocompleteComponent.tsx
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 interface AutocompleteItem {
   id: number;
   name: string;
-  // Add other properties as needed
 }
 
-const fetchAutocompleteData = async (): Promise<AutocompleteItem[]> => {
+const fetchAutocompleteData = async (
+  query: string
+): Promise<AutocompleteItem[]> => {
   const response = await fetch(
-    "https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete"
+    `https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete?query=${query}`
   );
   const data = await response.json();
   return data;
@@ -24,17 +26,20 @@ const AutocompleteComponent: React.FC = () => {
     isError,
   } = useQuery<AutocompleteItem[], Error>({
     queryKey: ["repoData"],
-    queryFn: fetchAutocompleteData,
+    queryFn: () => fetchAutocompleteData(query),
   });
 
-  const filteredSuggestions = autocompleteData
-    ? autocompleteData.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+  const handleInputChange = (
+    event: React.ChangeEvent<{}>,
+    value: AutocompleteItem | AutocompleteItem[] | null
+  ) => {
+    if (Array.isArray(value) || value === null) {
+      // Reset the query if value is an array or null
+      setQuery("");
+    } else {
+      // Update the query with the selected item's name
+      setQuery(value.name);
+    }
   };
 
   if (isLoading) {
@@ -47,18 +52,15 @@ const AutocompleteComponent: React.FC = () => {
 
   return (
     <div className="wrapper-card-text">
-      <input
-        type="text"
-        value={query}
+      <Autocomplete
+        value={autocompleteData?.find((item) => item.name === query) || null}
         onChange={handleInputChange}
-        placeholder="Type to search"
-        className="card-text"
+        options={autocompleteData || []}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <TextField {...params} label="Type to search" variant="outlined" />
+        )}
       />
-      <ul>
-        {filteredSuggestions.map((item) => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
     </div>
   );
 };
