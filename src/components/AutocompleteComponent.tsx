@@ -34,22 +34,17 @@ const AutocompleteComponent: React.FC = () => {
     value: AutocompleteItem | AutocompleteItem[] | null
   ) => {
     if (Array.isArray(value) || value === null) {
-      // Reset the query if value is an array or null
       setQuery("");
     } else {
-      // Update the query with the selected item's name
       setQuery(value.name);
     }
   };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (isError) {
     return <div>Error fetching autocomplete data</div>;
   }
-
   return (
     <div className="wrapper-card-text">
       <Autocomplete
