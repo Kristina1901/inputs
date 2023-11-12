@@ -116,3 +116,10 @@ textarea {
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
 }
+.MuiAutocomplete-hasPopupIcon.css-chq866 .MuiOutlinedInput-root,
+.MuiAutocomplete-hasClearIcon.css-chq866 .MuiOutlinedInput-root {
+  padding: 0;
+}
+.css-1x5jdmq {
+  padding: 0;
+}
