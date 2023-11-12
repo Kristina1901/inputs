@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { AutocompleteInputChangeReason } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import ClearSharpIcon from "@mui/icons-material/ClearSharp";
 
 interface AutocompleteItem {
   id: number;
@@ -46,6 +48,8 @@ const AutocompleteComponent: React.FC = () => {
   const [words, setWords] = useState<(string | AutocompleteItem)[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editedValue, setEditedValue] = useState<string>("");
 
   const {
     data: autocompleteData,
@@ -70,11 +74,38 @@ const AutocompleteComponent: React.FC = () => {
     setInputValue(value);
   };
 
+  const handleChange = (index: number, newValue: string) => {
+    setWords((prevWords) => {
+      const newWords = [...prevWords];
+      if (isAutocompleteItem(newWords[index])) {
+        const updatedItem: AutocompleteItem = {
+          ...(newWords[index] as AutocompleteItem),
+          name: newValue,
+        };
+        newWords[index] = updatedItem;
+      }
+      return newWords;
+    });
+  };
+
   const handleAutocompleteChange = (
     _event: React.ChangeEvent<{}>,
     value: (string | AutocompleteItem)[]
   ) => {
     setWords(value);
+  };
+
+  const startEditing = (index: number) => {
+    setEditingIndex(index);
+    setEditedValue(
+      isAutocompleteItem(words[index])
+        ? (words[index] as AutocompleteItem).name
+        : words[index].toString()
+    );
+  };
+
+  const stopEditing = () => {
+    setEditingIndex(null);
   };
 
   if (isLoading) {
@@ -103,6 +134,43 @@ const AutocompleteComponent: React.FC = () => {
         }
         freeSolo={true}
         renderInput={(params) => <TextField {...params} variant="outlined" />}
+        renderTags={(value: (string | AutocompleteItem)[], getTagProps) =>
+          value.map((option, index) => {
+            const label =
+              index === editingIndex ? (
+                <TextField
+                  className="text-area"
+                  value={editingIndex === index ? editedValue : ""}
+                  onChange={(e) => setEditedValue(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      handleChange(index, editedValue);
+                      stopEditing();
+                    }
+                  }}
+                  autoFocus
+                />
+              ) : isAutocompleteItem(option) ? (
+                option.name
+              ) : (
+                option.toString() // convert to string to ensure ReactNode
+              );
+
+            return (
+              <Chip
+                label={label}
+                {...getTagProps({ index })}
+                onDelete={() => {
+                  const newWords = [...words];
+                  newWords.splice(index, 1);
+                  setWords(newWords);
+                }}
+                onClick={() => startEditing(index)}
+                avatar={<ClearSharpIcon style={{ cursor: "pointer" }} />}
+              />
+            );
+          })
+        }
       />
     </div>
   );
