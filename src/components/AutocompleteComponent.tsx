@@ -102,9 +102,7 @@ const AutocompleteComponent: React.FC = () => {
           isAutocompleteItem(option) ? option.name : option
         }
         freeSolo={true}
-        renderInput={(params) => (
-          <TextField {...params} label="Type to search" variant="outlined" />
-        )}
+        renderInput={(params) => <TextField {...params} variant="outlined" />}
       />
     </div>
   );
