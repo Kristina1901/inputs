@@ -7,7 +7,13 @@ interface AutocompleteItem {
   id: number;
   name: string;
 }
-
+function removeDuplicates<T>(arr: T[], key: keyof T): T[] {
+  const seen = new Set();
+  return arr.filter((item) => {
+    const keyValue = item[key];
+    return seen.has(keyValue) ? false : seen.add(keyValue);
+  });
+}
 const fetchAutocompleteData = async (
   query: string
 ): Promise<AutocompleteItem[]> => {
@@ -15,7 +21,7 @@ const fetchAutocompleteData = async (
     `https://652f91320b8d8ddac0b2b62b.mockapi.io/autocomplete?query=${query}`
   );
   const data = await response.json();
-  return data;
+  return removeDuplicates(data, "name");
 };
 
 const AutocompleteComponent: React.FC = () => {
@@ -29,7 +35,6 @@ const AutocompleteComponent: React.FC = () => {
     queryKey: ["repoData"],
     queryFn: () => fetchAutocompleteData(words[words.length - 1]?.name || ""),
   });
-
   const handleInputChange = (
     event: React.ChangeEvent<{}>,
     value: AutocompleteItem[] | null
