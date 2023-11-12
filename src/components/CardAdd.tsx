@@ -20,5 +20,4 @@ function CardAdd() {
     </div>
   );
 }
-
 export default CardAdd;
