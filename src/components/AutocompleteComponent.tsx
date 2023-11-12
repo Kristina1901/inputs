@@ -10,7 +10,6 @@ interface AutocompleteItem {
   id: number;
   name: string;
 }
-
 function removeDuplicates<T>(arr: T[], key: keyof T): T[] {
   const seen = new Set();
   return arr.filter((item) => {
@@ -18,7 +17,6 @@ function removeDuplicates<T>(arr: T[], key: keyof T): T[] {
     return seen.has(keyValue) ? false : seen.add(keyValue);
   });
 }
-
 const isAutocompleteItem = (
   query: string | AutocompleteItem
 ): query is AutocompleteItem => {
@@ -28,7 +26,6 @@ const isAutocompleteItem = (
     query.name.trim().length > 0
   );
 };
-
 const fetchAutocompleteData = async (
   query: string | AutocompleteItem
 ): Promise<AutocompleteItem[]> => {
@@ -50,7 +47,6 @@ const AutocompleteComponent: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedValue, setEditedValue] = useState<string>("");
-
   const {
     data: autocompleteData,
     isLoading,
@@ -65,7 +61,6 @@ const AutocompleteComponent: React.FC = () => {
       setOpen(true);
     }
   };
-
   const handleInputChange = (
     _event: React.ChangeEvent<{}>,
     value: string,
@@ -73,7 +68,6 @@ const AutocompleteComponent: React.FC = () => {
   ) => {
     setInputValue(value);
   };
-
   const handleChange = (index: number, newValue: string) => {
     setWords((prevWords) => {
       const newWords = [...prevWords];
@@ -87,14 +81,12 @@ const AutocompleteComponent: React.FC = () => {
       return newWords;
     });
   };
-
   const handleAutocompleteChange = (
     _event: React.ChangeEvent<{}>,
     value: (string | AutocompleteItem)[]
   ) => {
     setWords(value);
   };
-
   const startEditing = (index: number) => {
     setEditingIndex(index);
     setEditedValue(
@@ -103,18 +95,15 @@ const AutocompleteComponent: React.FC = () => {
         : words[index].toString()
     );
   };
-
   const stopEditing = () => {
     setEditingIndex(null);
   };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (isError) {
     return <div>Error fetching autocomplete data</div>;
   }
-
   return (
     <div className="wrapper-card-text">
       <Autocomplete
@@ -153,7 +142,7 @@ const AutocompleteComponent: React.FC = () => {
               ) : isAutocompleteItem(option) ? (
                 option.name
               ) : (
-                option.toString() // convert to string to ensure ReactNode
+                option.toString()
               );
 
             return (
