@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+
 interface AutocompleteItem {
   id: number;
   name: string;
@@ -18,37 +19,41 @@ const fetchAutocompleteData = async (
 };
 
 const AutocompleteComponent: React.FC = () => {
-  const [query, setQuery] = useState<string>("");
+  const [words, setWords] = useState<AutocompleteItem[]>([]);
+
   const {
     data: autocompleteData,
     isLoading,
     isError,
   } = useQuery<AutocompleteItem[], Error>({
     queryKey: ["repoData"],
-    queryFn: () => fetchAutocompleteData(query),
+    queryFn: () => fetchAutocompleteData(words[words.length - 1]?.name || ""),
   });
 
   const handleInputChange = (
     event: React.ChangeEvent<{}>,
-    value: AutocompleteItem | AutocompleteItem[] | null
+    value: AutocompleteItem[] | null
   ) => {
-    if (Array.isArray(value) || value === null) {
-      setQuery("");
-    } else {
-      setQuery(value.name);
+    if (value) {
+      setWords(value);
     }
   };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (isError) {
     return <div>Error fetching autocomplete data</div>;
   }
+
   return (
     <div className="wrapper-card-text">
       <Autocomplete
-        value={autocompleteData?.find((item) => item.name === query) || null}
-        onChange={handleInputChange}
+        multiple
+        id="size-small-filled-multi"
+        size="small"
+        value={words}
+        onChange={(_, value) => handleInputChange(_, value)}
         options={autocompleteData || []}
         getOptionLabel={(option) => option.name}
         renderInput={(params) => (
