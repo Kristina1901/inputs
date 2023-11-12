@@ -118,8 +118,8 @@ textarea {
 }
 .MuiAutocomplete-hasPopupIcon.css-chq866 .MuiOutlinedInput-root,
 .MuiAutocomplete-hasClearIcon.css-chq866 .MuiOutlinedInput-root {
-  padding: 0;
+  padding: 0 !important;
 }
 .css-1x5jdmq {
-  padding: 0;
+  padding: 0 !important;
 }
